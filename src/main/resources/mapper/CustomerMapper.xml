@@ -1,0 +1,82 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.three.server.mapper.CustomerMapper">
+    <resultMap id="CustomerResultMap" type="com.three.server.entity.Customer">
+        <id property="id" column="customer_id"/>
+        <result property="name" column="customer_name"/>
+        <result property="sex" column="customer_sex"/>
+        <result property="identity" column="customer_identity"/>
+        <result property="phone" column="customer_phone"/>
+        <result property="avatar" column="customer_avatar"/>
+        <result property="credit" column="customer_credit"/>
+        <result property="userId" column="customer_user"/>
+        <result property="address" column="customer_address"/>
+        <result property="isDeleted" column="customer_is_deleted"/>
+    </resultMap>
+
+    <insert id="insertCustomer" parameterType="com.three.server.entity.Customer">
+        INSERT INTO customer (customer_name, customer_sex, customer_identity,customer_phone,customer_avatar,customer_credit,customer_user,customer_address,customer_is_deleted)
+        VALUES (#{name}, #{sex}, #{identity},#{phone},#{avatar},#{credit},#{userId},#{address},0)
+    </insert>
+
+    <update id="deleteCustomerById" parameterType="int">
+        UPDATE customer
+        SET customer_is_deleted = 1
+        WHERE customer_id = #{id}
+    </update>
+
+    <update id="updateCustomer" parameterType="com.three.server.entity.Customer">
+        UPDATE customer
+        SET customer_name = #{name}, customer_sex = #{sex}, customer_identity = #{identity},
+            customer_phone = #{phone},customer_avatar = #{avatar},customer_credit = #{credit},
+            customer_user = #{userId},customer_address = #{address},customer_is_deleted = #{isDeleted}
+        WHERE customer_id = #{id}
+    </update>
+
+    <update id="saveCustomerAvatarUrl" parameterType="map">
+        UPDATE customer
+        SET customer_avatar = #{theUrl}
+        WHERE customer_id = #{id} AND customer_is_deleted != 1
+    </update>
+
+    <select id="findAll" resultMap="CustomerResultMap">
+        SELECT * FROM customer WHERE customer_is_deleted != 1
+    </select>
+
+    <select id="selectCustomerById" parameterType="int" resultMap="CustomerResultMap">
+        SELECT * FROM customer
+        WHERE customer_id = #{id}
+        AND customer_is_deleted != 1
+    </select>
+
+    <select id="selectCustomerByUsername" parameterType="string" resultMap="CustomerResultMap">
+        SELECT c.*
+        FROM customer c
+                 JOIN user u ON c.customer_user = u.user_id
+        WHERE u.user_name = #{username}
+        AND c.customer_is_deleted != 1
+    </select>
+
+
+    <select id="selectCustomerByNameAndPhone" resultMap="CustomerResultMap" parameterType="map">
+        SELECT * FROM customer
+        WHERE 1=1
+        <if test="name != null">
+            AND customer_name LIKE CONCAT('%', #{name}, '%')
+        </if>
+        <if test="phone != null">
+            AND customer_phone = #{phone}
+        </if>
+            AND customer_is_deleted != 1
+    </select>
+
+
+
+<!--    <select id="selectCustomerByNameAndPhone" resultMap="CustomerResultMap" parameterType="map">-->
+<!--        SELECT * FROM customer-->
+<!--        WHERE-->
+<!--            <if test=""></if>-->
+<!--    </select>-->
+</mapper>

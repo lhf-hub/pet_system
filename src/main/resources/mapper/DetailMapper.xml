@@ -1,0 +1,49 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.three.server.mapper.DetailMapper">
+    <resultMap id="DetailResultMap" type="com.three.server.entity.Detail">
+        <id property="id" column="detail_id"/>
+        <result property="goodId" column="detail_good"/>
+        <result property="quantity" column="detail_quantity"/>
+        <result property="orderId" column="detail_order"/>
+        <result property="isDeleted" column="detail_is_deleted"/>
+        <result property="state" column="detail_state"/>
+        <result property="total" column="detail_total"/>
+    </resultMap>
+
+    <select id="findById" resultMap="DetailResultMap" parameterType="int">
+        SELECT * FROM detail WHERE detail_id = #{id}
+    </select>
+
+    <select id="findAll" resultMap="DetailResultMap">
+        SELECT * FROM detail
+    </select>
+
+    <insert id="addDetail" parameterType="com.three.server.entity.Detail" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO detail (detail_good, detail_quantity, detail_order,detail_is_deleted , detail_state, detail_total)
+        VALUES (#{goodId}, #{quantity}, #{orderId}, 0, #{state}, #{total})
+    </insert>
+
+    <update id="updateDetail" parameterType="com.three.server.entity.Detail">
+        UPDATE detail
+        SET good_id = #{goodId},
+            quantity = #{quantity},
+            order_id = #{orderId},
+            is_deleted = #{isDeleted},
+            state = #{state},
+            total = #{total}
+        WHERE detail_id = #{id}
+    </update>
+
+    <update id="deleteDetail" parameterType="int">
+        update detail
+        SET detail_is_deleted = 1
+        WHERE detail_id = #{id}
+    </update>
+
+    <select id="findByOrderId" resultMap="DetailResultMap" parameterType="int">
+        SELECT * FROM detail WHERE detail_order = #{id}
+    </select>
+</mapper>

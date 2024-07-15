@@ -1,0 +1,214 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.three.server.mapper.ViewMapper">
+    <select id="getClassificationPerDay" resultType="map">
+        SELECT *
+        FROM classification_per_day
+    </select>
+
+    <select id="getClassificationPerMonth" resultType="map">
+        SELECT *
+        FROM classification_per_month
+    </select>
+
+    <select id="getClassificationPerYear" resultType="map">
+        SELECT *
+        FROM classification_per_year
+    </select>
+
+    <select id="getMoneyPerDay" resultType="map">
+        SELECT *
+        FROM money_per_day
+    </select>
+
+    <select id="getMoneyPerMonth" resultType="map">
+        SELECT *
+        FROM money_per_month
+    </select>
+
+    <select id="getMoneyPerYear" resultType="map">
+        SELECT *
+        FROM money_per_year
+    </select>
+
+    <select id="getSalePerDay" resultType="map">
+        SELECT *
+        FROM sale_per_day
+    </select>
+
+    <select id="getSalePerMonth" resultType="map">
+        SELECT *
+        FROM sale_per_month
+    </select>
+
+    <select id="getSalePerYear" resultType="map">
+        SELECT *
+        FROM sale_per_year
+    </select>
+
+    <select id="getClassificationPerDayWithParams" parameterType="map" resultType="map">
+        SELECT * FROM classification_per_day
+                 WHERE date = #{date} AND classification = #{classification}
+    </select>
+    <select id="getClassificationPerMonthWithParams" resultType="map" parameterType="map">
+        SELECT *
+        FROM classification_per_month
+        WHERE year = #{year} AND month = #{month} AND classification = #{classification}
+    </select>
+    <select id="getClassificationPerYearWithParams" parameterType="map" resultType="map">
+        SELECT * FROM classification_per_year
+        WHERE year = #{year} AND classification = #{classification}
+    </select>
+
+    <select id="getMoneyPerDayWithParams" parameterType="map" resultType="map">
+        SELECT * FROM money_per_day
+        WHERE date = #{date}
+    </select>
+
+    <select id="getMoneyPerMonthWithParams" parameterType="map" resultType="map">
+        SELECT * FROM money_per_month
+        WHERE year = #{year} AND month = #{month}
+    </select>
+
+    <select id="getMoneyPerYearWithParams" parameterType="map" resultType="map">
+        SELECT * FROM money_per_year
+        WHERE year = #{year}
+    </select>
+
+    <select id="getSalePerDayWithParams" parameterType="map" resultType="map">
+        SELECT * FROM sale_per_day
+        WHERE date = #{date}
+    </select>
+
+    <select id="getSalePerMonthWithParams" parameterType="map" resultType="map">
+        SELECT * FROM sale_per_month
+        WHERE year = #{year} AND month = #{month}
+    </select>
+
+    <select id="getSalePerYearWithParams" parameterType="map" resultType="map">
+        SELECT * FROM sale_per_year
+        WHERE year = #{year}
+    </select>
+
+
+
+    <select id="getSellerClassificationPerDay" resultType="map">
+        SELECT *
+        FROM seller_classification_per_day
+    </select>
+
+    <select id="getSellerClassificationPerMonth" resultType="map">
+        SELECT *
+        FROM seller_classification_per_month
+    </select>
+
+    <select id="getSellerClassificationPerYear" resultType="map">
+        SELECT *
+        FROM seller_classification_per_year
+    </select>
+
+    <select id="getSellerMoneyPerDay" resultType="map">
+        SELECT *
+        FROM seller_money_per_day
+    </select>
+
+    <select id="getSellerMoneyPerMonth" resultType="map">
+        SELECT *
+        FROM seller_money_per_month
+    </select>
+
+    <select id="getSellerMoneyPerYear" resultType="map">
+        SELECT *
+        FROM seller_money_per_year
+    </select>
+
+    <select id="getSellerSalePerDay" resultType="map">
+        SELECT *
+        FROM seller_sale_per_day
+    </select>
+
+    <select id="getSellerSalePerMonth" resultType="map">
+        SELECT *
+        FROM seller_sale_per_month
+    </select>
+
+    <select id="getSellerSalePerYear" resultType="map">
+        SELECT *
+        FROM seller_sale_per_year
+    </select>
+
+    <select id="getSellerClassificationPerDayWithParams" parameterType="map" resultType="map">
+        SELECT * FROM seller_classification_per_day
+        WHERE date = #{date} AND seller = #{seller} AND classification = #{classification}
+    </select>
+
+    <select id="getSellerClassificationPerMonthWithParams" resultType="map" parameterType="map">
+        SELECT *
+        FROM seller_classification_per_month
+        WHERE year = #{year} AND month = #{month} AND seller = #{seller} AND classification = #{classification}
+    </select>
+
+    <select id="getSellerClassificationPerYearWithParams" parameterType="map" resultType="map">
+        SELECT * FROM seller_classification_per_year
+        WHERE year = #{year} AND seller = #{seller} AND classification = #{classification}
+    </select>
+
+    <select id="getSellerMoneyPerDayWithParams" parameterType="map" resultType="map">
+        SELECT * FROM seller_money_per_day
+        WHERE date = #{date} AND seller = #{seller}
+    </select>
+
+    <select id="getSellerMoneyPerMonthWithParams" parameterType="map" resultType="map">
+        SELECT * FROM seller_money_per_month
+        WHERE year = #{year} AND month = #{month} AND seller = #{seller}
+    </select>
+
+    <select id="getSellerMoneyPerYearWithParams" parameterType="map" resultType="map">
+        SELECT * FROM seller_money_per_year
+        WHERE year = #{year} AND seller = #{seller}
+    </select>
+
+    <select id="getSellerSalePerDayWithParams" parameterType="map" resultType="map">
+        SELECT * FROM seller_sale_per_day
+        WHERE date = #{date} AND seller = #{seller}
+    </select>
+
+    <select id="getSellerSalePerMonthWithParams" parameterType="map" resultType="map">
+        SELECT * FROM seller_sale_per_month
+        WHERE year = #{year} AND month = #{month} AND seller = #{seller}
+    </select>
+
+    <select id="getSellerSalePerYearWithParams" parameterType="map" resultType="map">
+        SELECT * FROM seller_sale_per_year
+        WHERE year = #{year} AND seller = #{seller}
+    </select>
+
+
+    <select id="getTotalCity" resultType="map">
+        SELECT *
+        FROM total_city
+    </select>
+
+    <select id="getTotalCityWithParams" parameterType="map" resultType="map">
+        SELECT * FROM total_city
+        WHERE city = #{city}
+    </select>
+
+    <select id="getTotalGoodFlow" resultType="map">
+        SELECT *
+        FROM total_good_flow
+    </select>
+
+    <select id="getTotalGoodFlowWithParams" parameterType="map" resultType="map">
+        SELECT * FROM total_good_flow
+        WHERE seller = #{seller} AND classification = #{classification}
+    </select>
+
+    <select id="getTotalSellerSubscription" resultType="map">
+        SELECT *
+        FROM total_seller_subscription
+    </select>
+
+</mapper>

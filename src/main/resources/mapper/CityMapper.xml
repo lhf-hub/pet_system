@@ -1,0 +1,43 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.three.server.mapper.CityMapper">
+    <resultMap id="CityResultMap" type="com.three.server.entity.City">
+        <id property="id" column="city_id"/>
+        <result property="name" column="city_name"/>
+        <result property="isDeleted" column="city_is_deleted"/>
+    </resultMap>
+
+    <select id="findById" resultMap="CityResultMap" parameterType="int">
+        SELECT * FROM city WHERE city_id = #{id}
+        AND city_is_deleted != 1
+    </select>
+
+    <select id="findAll" resultMap="CityResultMap">
+        SELECT * FROM city
+        WHERE city_is_deleted != 1
+    </select>
+
+    <insert id="addCity" parameterType="com.three.server.entity.City" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO city (city_name,city_is_deleted)
+        VALUES (#{name},0)
+    </insert>
+
+    <update id="updateCity" parameterType="com.three.server.entity.City">
+        UPDATE city
+        SET city_name = #{name}
+        WHERE id = #{id}
+    </update>
+
+    <update id="deleteCity" parameterType="int">
+        UPDATE city
+        SET city_is_deleted = 1
+        WHERE id = #{id}
+    </update>
+
+    <select id="filterByName" resultMap="CityResultMap" parameterType="string">
+        SELECT * FROM city
+        WHERE city_name LIKE CONCAT('%',#{name},'%')
+          AND city_is_deleted != 1
+    </select>
+</mapper>

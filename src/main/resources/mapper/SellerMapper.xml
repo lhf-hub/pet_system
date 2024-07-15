@@ -1,0 +1,132 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.three.server.mapper.SellerMapper">
+    <resultMap id="SellerResultMap" type="com.three.server.entity.Seller">
+        <id property="id" column="seller_id"/>
+        <result property="name" column="seller_name"/>
+        <result property="owner" column="seller_owner"/>
+        <result property="phone" column="seller_phone"/>
+        <result property="ownerIdentity" column="seller_owner_identity"/>
+        <result property="avatar" column="seller_avatar"/>
+        <result property="address" column="seller_address"/>
+        <result property="userId" column="seller_user"/>
+        <result property="subscription" column="seller_subscription"/>
+        <result property="description" column="seller_description"/>
+        <result property="attachment" column="seller_attachment"/>
+        <result property="state" column="seller_state"/>
+        <result property="isDeleted" column="seller_is_deleted"/>
+        <result property="flow" column="seller_flow"/>
+        <result property="createdAt" column="seller_created_at" jdbcType="TIMESTAMP"/>
+        <result property="cityId" column="seller_city"/>
+    </resultMap>
+
+    <select id="findAll" resultMap="SellerResultMap">
+        SELECT * FROM seller
+    </select>
+
+    <select id="filterSeller" resultMap="SellerResultMap" parameterType="map">
+        SELECT * FROM seller
+        WHERE 1=1
+        <if test="name != null">
+            AND seller_name LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test="owner != null">
+            AND seller_owner LIKE CONCAT('%',#{owner},'%')
+        </if>
+        <if test="phone != null">
+            AND seller_phone = #{phone}
+        </if>
+        <if test="city != null">
+            AND seller_city LIKE CONCAT('%',#{city},'%')
+        </if>
+        <if test="lowest != null">
+            AND seller_subscription >= #{lowest}
+        </if>
+        <if test="highest != null">
+            AND #{highest} >= seller_subscription
+        </if>
+    </select>
+
+    <insert id="addSeller" parameterType="com.three.server.entity.Seller">
+        INSERT INTO seller (seller_name, seller_owner, seller_phone, seller_owner_identity, seller_avatar, seller_address,seller_user, seller_subscription, seller_description, seller_attachment, seller_state, seller_is_deleted, seller_flow, seller_created_at,seller_city)
+        VALUES (#{name}, #{owner}, #{phone}, #{ownerIdentity}, #{avatar}, #{address}, #{userId},0, #{description},#{attachment}, 0, 0, 0, NOW(),#{cityId})
+    </insert>
+
+    <update id="deleteSellerById" parameterType="int">
+        UPDATE seller
+        SET seller_is_deleted = 1
+        WHERE seller_id = #{id}
+    </update>
+
+    <update id="updateSeller" parameterType="com.three.server.entity.Seller">
+        UPDATE seller
+        SET seller_name = #{name},
+            seller_owner = #{owner},
+            seller_phone = #{phone},
+            seller_owner_identity = #{ownerIdentity},
+            seller_avatar = #{avatar},
+            seller_address = #{address},
+            seller_user = #{userId},
+            seller_subscription = #{subscription},
+            seller_description = #{description},
+            seller_attachment = #{attachment},
+            seller_state = #{state},
+            seller_is_deleted = #{isDeleted},
+            seller_flow = #{flow},
+            seller_created_at = #{createdAt},
+            seller_city = #{cityId}
+        WHERE seller_id = #{id}
+    </update>
+
+    <update id="saveSellerAvatarUrl" parameterType="map">
+        UPDATE seller
+        SET seller_avatar = #{theUrl}
+        WHERE seller_id = #{id}
+    </update>
+
+    <update id="saveSellerAttachment" parameterType="map">
+        UPDATE seller
+        SET seller_attachment = #{theUrl}
+        WHERE seller_id = #{id}
+    </update>
+
+    <select id="findByUsername" parameterType="string" resultMap="SellerResultMap">
+        SELECT s.*
+        FROM seller s JOIN user u ON s.seller_user = u.user_id
+        WHERE u.user_name = #{username}
+    </select>
+
+    <select id="findById" parameterType="int" resultMap="SellerResultMap">
+        SELECT *
+        FROM seller
+        WHERE seller_id = #{id} AND seller_is_deleted != 1
+    </select>
+
+    <select id="getAvatarUrl" parameterType="int" resultType="string">
+        SELECT seller_avatar
+        FROM seller
+        WHERE seller_id = #{id}
+    </select>
+
+    <select id="getAttachmentUrl" parameterType="int" resultType="string">
+        SELECT seller_attachment
+        FROM seller
+        WHERE seller_id = #{id}
+    </select>
+
+    <!-- 插入订阅记录 -->
+    <insert id="insertSubscription" parameterType="com.three.server.entity.Subscription">
+        INSERT INTO subscription (subscription_customer, subscription_seller)
+        VALUES (#{customerId}, #{sellerId})
+    </insert>
+
+    <!-- 更新卖家的订阅量 -->
+    <update id="sellerSubscriptionPlus" parameterType="int">
+        UPDATE seller
+        SET seller_subscription = seller_subscription + 1
+        WHERE seller_id = #{id}
+    </update>
+
+</mapper>

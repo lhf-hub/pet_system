@@ -1,0 +1,11 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.three.server.mapper.SubscriptionMapper">
+    <select id="isExist" resultType="boolean" parameterType="map">
+        SELECT COUNT(*) > 0
+        FROM subscription
+        WHERE subscription_customer = #{customerId} AND subscription_seller = #{sellerId}
+    </select>
+</mapper>

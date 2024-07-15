@@ -1,0 +1,44 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.three.server.mapper.AdminMapper">
+    <resultMap id="AdminResultMap" type="com.three.server.entity.Admin">
+        <id property="id" column="admin_id"/>
+        <result property="name" column="admin_name"/>
+        <result property="sex" column="admin_sex"/>
+        <result property="phone" column="admin_phone"/>
+        <result property="avatar" column="admin_avatar"/>
+        <result property="identity" column="admin_identity"/>
+        <result property="userId" column="admin_user"/>
+        <result property="isDeleted" column="admin_is_deleted"/>
+    </resultMap>
+    
+    <insert id="add" parameterType="com.three.server.entity.Admin">
+        INSERT INTO admin (admin_name, admin_sex, admin_phone, admin_avatar, admin_identity, admin_user, admin_is_deleted)
+        VALUES (#{name}, #{sex}, #{phone}, #{avatar}, #{identity}, #{userId}, 0)
+    </insert>
+
+    <update id="update" parameterType="com.three.server.entity.Admin">
+        UPDATE admin
+        SET admin_name = #{name},
+            admin_sex = #{sex},
+            admin_phone = #{phone},
+            admin_avatar = #{avatar},
+            admin_identity = #{identity},
+            admin_user = #{userId},
+            admin_is_deleted = #{isDeleted}
+        WHERE admin_id = #{id}
+    </update>
+
+    <delete id="delete">
+        UPDATE admin
+        SET admin_is_deleted = 1,
+            WHERE id = #{id}
+    </delete>
+    
+    <select id="findById" resultMap="AdminResultMap" parameterType="int">
+        SELECT * FROM admin WHERE id = #{id} AND admin_is_deleted != 1
+    </select>
+    
+</mapper>

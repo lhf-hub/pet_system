@@ -1,0 +1,69 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.three.server.mapper.ActivityMapper">
+    <resultMap id="ActivityResultMap" type="com.three.server.entity.Activity">
+        <id property="id" column="activity_id"/>
+        <result property="name" column="activity_name"/>
+        <result property="goodId" column="activity_good"/>
+        <result property="startTime" column="activity_start_time" jdbcType="TIMESTAMP"/>
+        <result property="endTime" column="activity_end_time" jdbcType="TIMESTAMP"/>
+        <result property="description" column="activity_description"/>
+        <result property="avatar" column="activity_avatar"/>
+        <result property="discount" column="activity_discount"/>
+        <result property="isDeleted" column="activity_is_deleted"/>
+        <result property="createdAt" column="activity_created_at" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <select id="findById" resultMap="ActivityResultMap" parameterType="int">
+        SELECT * FROM activity WHERE id = #{id} AND activity_is_deleted != 1
+    </select>
+
+    <select id="findAll" resultMap="ActivityResultMap">
+        SELECT * FROM activity WHERE activity_is_deleted != 1
+    </select>
+
+    <insert id="addActivity" parameterType="com.three.server.entity.Activity" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO activity (activity_name, activity_good, activity_start_time, activity_end_time, activity_description, activity_avatar, activity_discount, activity_is_deleted, activity_created_at)
+        VALUES (#{name}, #{goodId}, #{startTime}, #{endTime}, #{description}, #{avatar}, #{discount}, 0, NOW())
+    </insert>
+
+    <update id="updateActivity" parameterType="com.three.server.entity.Activity">
+        UPDATE activity
+        SET activity_name = #{name},
+            activity_good = #{goodId},
+            activity_start_time = #{startTime},
+            activity_end_time = #{endTime},
+            activity_description = #{description},
+            activity_avatar = #{avatar},
+            activity_discount = #{discount},
+            activity_is_deleted = #{isDeleted},
+            activity_created_at = #{createdAt}
+        WHERE id = #{id}
+    </update>
+
+    <update id="deleteActivity" parameterType="int">
+        UPDATE activity
+        SET activity_is_deleted = 1,
+        WHERE id = #{id}
+    </update>
+
+    <select id="filterActivity" resultMap="ActivityResultMap" parameterType="map">
+        SELECT * FROM activity
+        WHERE 1=1
+        <if test="name != null">
+            AND activity_name LIKE CONCAT('%',#{name},'%')
+        </if>
+        <if test="startTime != null">
+            AND activity_start_time >= #{startTime}
+        </if>
+        <if test="endTime != null">
+            AND #{highest} >= activity_end_time
+        </if>
+        <if test="discount != null">
+            AND #{discount} >= activity_discount
+        </if>
+            AND activity_is_deleted != 1
+    </select>
+</mapper>
